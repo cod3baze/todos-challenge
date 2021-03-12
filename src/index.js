@@ -13,9 +13,11 @@ function checksExistsUserAccount(request, response, next) {
   const { username } = request.headers;
 
   const userAlreadyExists = users.some((user) => user.username === username);
+  const user = users.find((user) => user.username === username);
 
   if (userAlreadyExists) {
     request.username = username;
+    request.user = user;
     return next();
   }
 
@@ -71,66 +73,36 @@ app.post("/todos", checksExistsUserAccount, (request, response) => {
 });
 
 app.put("/todos/:id", checksExistsUserAccount, (request, response) => {
-  const { username } = request;
+  const { user } = request;
   const { id } = request.params;
   const { title, deadline } = request.body;
 
-  users.find((user) => {
-    if (user.username === username) {
-      return user.todos.filter((todo) => {
-        if (todo.id === id) {
-          return (todo = {
-            ...todo,
-            title,
-            deadline: new Date(deadline),
-          });
-        }
-      });
-    }
+  const todo = user.todos.find((todo) => todo.id === id);
 
-    return;
-  });
+  todo.title = title;
+  todo.deadline = new Date(deadline);
 
   return response.status(202).json();
 });
 
 app.patch("/todos/:id/done", checksExistsUserAccount, (request, response) => {
-  const { username } = request;
+  const { user } = request;
   const { id } = request.params;
 
-  users.find((user) => {
-    if (user.username === username) {
-      return user.todos.filter((todo) => {
-        if (todo.id === id) {
-          return (todo = {
-            ...todo,
-            done: true,
-          });
-        }
-      });
-    }
+  const todo = user.todos.find((todo) => todo.id === id);
 
-    return;
-  });
+  todo.done = true;
 
   return response.status(202).json();
 });
 
 app.delete("/todos/:id", checksExistsUserAccount, (request, response) => {
-  const { username } = request;
+  const { user } = request;
   const { id } = request.params;
 
-  users.find((user) => {
-    if (user.username === username) {
-      return user.todos.filter((todo) => {
-        if (todo.id === id) {
-          return (todo = {});
-        }
-      });
-    }
+  const todo = user.todos.find((todo) => todo.id === id);
 
-    return;
-  });
+  user.todos.splice(todo, 1);
 
   return response.status(202).json();
 });
