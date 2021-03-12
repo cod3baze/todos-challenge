@@ -40,15 +40,35 @@ app.post("/users", (request, response) => {
 });
 
 app.get("/todos", checksExistsUserAccount, (request, response) => {
-  const { username } = request.username;
+  const { username } = request;
 
+  console.log(username);
   const userData = users.find((user) => user.username === username);
 
   return response.status(200).json(userData.todos);
 });
 
 app.post("/todos", checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const { username } = request;
+  const { title, deadline } = request.body;
+
+  const todoOperation = {
+    id: uuidv4(),
+    title,
+    done: false,
+    deadline: new Date(deadline),
+    created_at: new Date(),
+  };
+
+  users.find((user) => {
+    if (user.username === username) {
+      return user.todos.push(todoOperation);
+    }
+
+    return;
+  });
+
+  return response.status(201).json();
 });
 
 app.put("/todos/:id", checksExistsUserAccount, (request, response) => {
