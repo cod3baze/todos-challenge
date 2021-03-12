@@ -75,7 +75,7 @@ app.put("/todos/:id", checksExistsUserAccount, (request, response) => {
   const { id } = request.params;
   const { title, deadline } = request.body;
 
-  const todoAlterated = users.find((user) => {
+  users.find((user) => {
     if (user.username === username) {
       return user.todos.filter((todo) => {
         if (todo.id === id) {
@@ -95,11 +95,44 @@ app.put("/todos/:id", checksExistsUserAccount, (request, response) => {
 });
 
 app.patch("/todos/:id/done", checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const { username } = request;
+  const { id } = request.params;
+
+  users.find((user) => {
+    if (user.username === username) {
+      return user.todos.filter((todo) => {
+        if (todo.id === id) {
+          return (todo = {
+            ...todo,
+            done: true,
+          });
+        }
+      });
+    }
+
+    return;
+  });
+
+  return response.status(202).json();
 });
 
 app.delete("/todos/:id", checksExistsUserAccount, (request, response) => {
-  // Complete aqui
+  const { username } = request;
+  const { id } = request.params;
+
+  users.find((user) => {
+    if (user.username === username) {
+      return user.todos.filter((todo) => {
+        if (todo.id === id) {
+          return (todo = {});
+        }
+      });
+    }
+
+    return;
+  });
+
+  return response.status(202).json();
 });
 
 module.exports = app;
