@@ -27,66 +27,62 @@ describe("Todos", () => {
     expect(response.body).toEqual(expect.arrayContaining([todoResponse.body]));
   });
 
-  // it('should be able to create a new todo', async () => {
-  //   const userResponse = await request(app)
-  //     .post('/users')
-  //     .send({
-  //       name: 'John Doe',
-  //       username: 'user2'
-  //     });
+  it("should be able to create a new todo", async () => {
+    const userResponse = await request(app).post("/users").send({
+      name: "John Doe",
+      username: "user2",
+    });
 
-  //   const todoDate = new Date();
+    const todoDate = new Date();
 
-  //   const response = await request(app)
-  //     .post('/todos')
-  //     .send({
-  //       title: 'test todo',
-  //       deadline: todoDate
-  //     })
-  //     .set('username', userResponse.body.username)
-  //     .expect(201);
+    const response = await request(app)
+      .post("/todos")
+      .send({
+        title: "test todo",
+        deadline: todoDate,
+      })
+      .set("username", userResponse.body.username)
+      .expect(201);
 
-  //   expect(response.body).toMatchObject({
-  //     title: 'test todo',
-  //     deadline: todoDate.toISOString(),
-  //     done: false
-  //   });
-  //   expect(validate(response.body.id)).toBe(true);
-  //   expect(response.body.created_at).toBeTruthy();
-  // });
+    expect(response.body).toMatchObject({
+      title: "test todo",
+      deadline: todoDate.toISOString(),
+      done: false,
+    });
+    expect(validate(response.body.id)).toBe(true);
+    expect(response.body.created_at).toBeTruthy();
+  });
 
-  // it('should be able to update a todo', async () => {
-  //   const userResponse = await request(app)
-  //     .post('/users')
-  //     .send({
-  //       name: 'John Doe',
-  //       username: 'user7'
-  //     });
+  it("should be able to update a todo", async () => {
+    const userResponse = await request(app).post("/users").send({
+      name: "John Doe",
+      username: "user7",
+    });
 
-  //   const todoDate = new Date();
+    const todoDate = new Date();
 
-  //   const todoResponse = await request(app)
-  //     .post('/todos')
-  //     .send({
-  //       title: 'test todo',
-  //       deadline: todoDate
-  //     })
-  //     .set('username', userResponse.body.username);
+    const todoResponse = await request(app)
+      .post("/todos")
+      .send({
+        title: "test todo",
+        deadline: todoDate,
+      })
+      .set("username", userResponse.body.username);
 
-  //   const response = await request(app)
-  //     .put(`/todos/${todoResponse.body.id}`)
-  //     .send({
-  //       title: 'update title',
-  //       deadline: todoDate
-  //     })
-  //     .set('username', userResponse.body.username);
+    const response = await request(app)
+      .put(`/todos/${todoResponse.body.id}`)
+      .send({
+        title: "update title",
+        deadline: todoDate,
+      })
+      .set("username", userResponse.body.username);
 
-  //   expect(response.body).toMatchObject({
-  //     title: 'update title',
-  //     deadline: todoDate.toISOString(),
-  //     done: false
-  //   });
-  // });
+    expect(response.body).toMatchObject({
+      title: "update title",
+      deadline: todoDate.toISOString(),
+      done: false,
+    });
+  });
 
   // it('should not be able to update a non existing todo', async () => {
   //   const userResponse = await request(app)
