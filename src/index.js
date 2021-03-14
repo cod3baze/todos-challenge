@@ -32,13 +32,13 @@ app.post("/users", (request, response) => {
   const userOperation = {
     name,
     username,
-    uuid: uuidv4(),
+    id: uuidv4(),
     todos: [],
   };
 
   users.push(userOperation);
 
-  return response.status(201).json();
+  return response.status(201).json(userOperation);
 });
 
 app.get("/todos", checksExistsUserAccount, (request, response) => {
