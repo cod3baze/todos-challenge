@@ -76,7 +76,7 @@ app.post("/todos", checksExistsUserAccount, (request, response) => {
     return;
   });
 
-  return response.status(201).json();
+  return response.status(201).json(todoOperation);
 });
 
 app.put("/todos/:id", checksExistsUserAccount, (request, response) => {
